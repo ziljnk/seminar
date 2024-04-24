@@ -4,6 +4,10 @@ body {
     font-family: "DM Sans", sans-serif;
 }
 
+input::placeholder {
+    font-family: "DM Sans", sans-serif;
+}
+
 .icon {
     width: 24px;
     height: 24px;
@@ -15,4 +19,8 @@ body {
 
 .bold-text {
     font-weight: bold;
+}
+
+.display-none {
+    display: none;
 }

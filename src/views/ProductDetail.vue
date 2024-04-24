@@ -23,7 +23,7 @@
             </div>
 
             <div class="size-section">
-                <div class="size">
+                <div class="size cursor-pointer" @click="isOpened = true">
                     <p>Size</p>
                     <div class="size-number">
                         <p style="font-weight: bold;">48</p>
@@ -42,6 +42,24 @@
     </section>
 
     <CommunityInspiration/>
+
+    <VueSidePanel
+		v-model="isOpened"
+		lock-scroll
+		width="50%"
+    >
+        <section class="side-panel-container">
+            <div class="title-wrapper">
+                <h1>Size</h1>
+            </div>
+
+            <div class="size-wrapper">
+                <p class="size-bubble cursor-pointer" v-for="size in 15">
+                    {{ size + 35 }}
+                </p>
+            </div>
+        </section>
+    </VueSidePanel>
 </DefaultLayout>
 </template>
 
@@ -147,6 +165,37 @@ h1, p {
 .detail-section p {
     letter-spacing: 1px;
 }
+
+.side-panel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.size-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 2rem 1rem;
+}
+
+.size-bubble {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #b4b4b4;
+    line-height: 50px;
+    text-align: center;
+    color: #b4b4b4;
+    transition: all .3s cubic-bezier(.39,.575,.565,1), box-shadow .3s cubic-bezier(.39,.575,.565,1);
+}
+
+.size-bubble:hover {
+    border: 1px solid black;
+    color: black;
+}
 </style>
 
 <script setup>
@@ -157,6 +206,7 @@ import { HeartIcon as HeartIconSolid } from '@heroicons/vue/24/solid';
 import { ref, onMounted } from 'vue';
 
 let isFavorite = ref(false);
+let isOpened = ref(false);
 
 function toggleFavorite() {
       isFavorite.value = !isFavorite.value; 
