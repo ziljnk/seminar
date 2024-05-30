@@ -5,15 +5,9 @@
 
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
-                <div class="swiper-slide"><InspirationItem/></div>
+                <div class="swiper-slide" v-for="(outfit, index) in outfitData" :key="index">
+                    <InspirationItem :imageURL="outfit"/>
+                </div>
             </div>
             <div class="swiper-pagination"></div>
         </div>
@@ -46,6 +40,10 @@ import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { ref, onMounted } from 'vue'
+
+const props = defineProps({
+    outfitData: Array
+})
 
 const swiperInstance = ref(null);
 

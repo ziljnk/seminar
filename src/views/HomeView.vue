@@ -3,6 +3,21 @@ import DefaultLayout from '../layouts/Default.vue';
 import ProductsGrid from '../layouts/ProductsGrid.vue';
 import Product from '../components/Product.vue';
 import { AdjustmentsHorizontalIcon } from '@heroicons/vue/24/outline';
+import { ref, onMounted } from "vue"
+
+let allProducts = ref([]);
+
+onMounted(() => {
+    fetch('http://localhost:2000/api/v1/products')
+    .then(response => response.json())
+    .then(data => {
+        allProducts.value = data.products;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+})
 </script>
 
 <template>
@@ -17,19 +32,7 @@ import { AdjustmentsHorizontalIcon } from '@heroicons/vue/24/outline';
         </section>
 
         <ProductsGrid>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
-            <Product/>
+            <Product v-for="(product, index) in allProducts" :key="index" :productInformation="product"/>
         </ProductsGrid>
     </DefaultLayout>
 </template>

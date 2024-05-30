@@ -2,20 +2,18 @@
 <DefaultLayout>
     <section class="product-information">
         <div class="image-group">
-            <img id="main-image" src="https://firebasestorage.googleapis.com/v0/b/seminar-d43fa.appspot.com/o/big-image.png?alt=media&token=32245838-20d7-41d0-bcb9-13a1cffaba93" alt="main product"/>
+            <img id="main-image" :src="productInformation.images[0]" alt="main product"/>
 
             <div class="sub-images">
-                <img class="sub-image" alt="sub-1" src="https://firebasestorage.googleapis.com/v0/b/seminar-d43fa.appspot.com/o/image-1.png?alt=media&token=64a747ad-70b4-4090-94c2-5625e241a018"/>
-                <img class="sub-image" alt="sub-2" src="https://firebasestorage.googleapis.com/v0/b/seminar-d43fa.appspot.com/o/image-2.png?alt=media&token=2d92577d-0bc9-4151-a2b7-0a124358d2ed"/>
-                <img class="sub-image" alt="sub-3" src="https://firebasestorage.googleapis.com/v0/b/seminar-d43fa.appspot.com/o/image-3.png?alt=media&token=53eb26c8-92e1-40ec-8e31-b4510c6660e8"/>
+                <img v-for="(image, index) in subImages" :key="index" class="sub-image" alt="sub-1" :src="image"/>
             </div>
         </div>
 
         <div class="text-group">
             <div class="title-section">
                 <div class="title-group">
-                    <h1 style="font-size: 40px;">Denim Jacket</h1>
-                    <p style="font-size: 30px;">$500</p>
+                    <h1 style="font-size: 40px;">{{ productInformation.name }}</h1>
+                    <p style="font-size: 30px;">${{productInformation.price}}</p>
                 </div>
 
                 <HeartIconSolid v-if="isFavorite" class="icon cursor-pointer" @click="toggleFavorite"/>
@@ -36,12 +34,12 @@
 
             <div class="detail-section">
                 <h1>Product Detail</h1>
-                <p>{{ "Long-sleeved, crew-neck sweatshirt. Regular fit.\nMade of black jersey. Decorated with a canvas patch featuring the FF Eclissi motif on the chest in shades of brown and black with a gradient effect. Made in Italy\nComposition: 100% cotton, buttons: 100% motherofpearl\nFit: Regular\nSize worn: 48 IT. The model is 187 cm tall\nProduct Code: FY0178AQJ9F0QA1" }}</p>
+                <p>{{ productInformation.description }}</p>
             </div>
         </div>
     </section>
 
-    <CommunityInspiration/>
+    <CommunityInspiration :outfitData="productInformation.inspireImages"/>
 
     <VueSidePanel
 		v-model="isOpened"
@@ -54,7 +52,7 @@
             </div>
 
             <div class="size-wrapper">
-                <p class="size-bubble cursor-pointer" v-for="size in 15">
+                <p class="size-bubble cursor-pointer" v-for="(size, index) in 15" :key="index">
                     {{ size + 35 }}
                 </p>
             </div>
@@ -88,6 +86,7 @@
 
 #main-image {
     width: 100%;
+    max-width: 500px;
 }
 
 .sub-images {
@@ -203,16 +202,30 @@ import DefaultLayout from '../layouts/Default.vue';
 import CommunityInspiration from '../components/CommunityInspiration.vue';
 import { HeartIcon, ChevronRightIcon } from '@heroicons/vue/24/outline';
 import { HeartIcon as HeartIconSolid } from '@heroicons/vue/24/solid';
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 
 let isFavorite = ref(false);
 let isOpened = ref(false);
+let productInformation = ref(null)
+let subImages = ref(null)
 
 function toggleFavorite() {
       isFavorite.value = !isFavorite.value; 
 }
 
-onMounted(() => {
+onBeforeMount(async () => {
     document.title = "LOUIS VUITTON | Product Detail";
+    const productId = await window.location.pathname.split("/")[1];
+    console.log("productId", productId)
+    fetch(`http://localhost:2000/api/v1/products/${productId}`)
+    .then(response => response.json())
+    .then(data => {
+        productInformation.value = data.product;
+        subImages.value = productInformation.value.images.shift()
+        console.log("productInformation", productInformation.value)
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 })
 </script>

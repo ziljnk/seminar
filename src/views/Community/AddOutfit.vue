@@ -2,13 +2,15 @@
     <CommunityLayout>
         <main>
             <section id="left">
-                <label id="choose-file-area">
+                <label v-if="!isUploaded" class="choose-file-area">
                     Choose a file or drag and drop it here
                     <p id="description-label">JPEG, PNG and PDG, up to 50MB</p>
 
                     <p id="button-browse-file">Browse file</p>
-                    <input id="choose-file" type="file" accept="image/*" class="display-none"/>
+                    <input id="choose-file" type="file" accept="image/*" class="display-none" @change="handleInputChange"/>
                 </label>
+
+                <img id="preview-image" class="choose-file-area" v-else :src="previewImageUrl" alt="preview"/>
             </section>
 
             <section id="right">
@@ -37,7 +39,7 @@
                     <input placeholder="Add hastag"/>
                 </div>
 
-                <button>Upload</button>
+                <button @click="handleUpload">Upload</button>
             </section>
         </main>
     </CommunityLayout>
@@ -45,6 +47,37 @@
 
 <script setup>
 import CommunityLayout from "../../layouts/Community.vue"
+import { ref, onMounted } from "vue"
+
+let isUploaded = ref(false);
+let previewImageUrl = ref('');
+let chooseFile = ref(null);
+
+onMounted(() => {
+    chooseFile.value = document.getElementById('choose-file');
+})
+
+function handleUpload() {
+    let data = new FormData();
+    data.append('image', chooseFile.value.files[0]);
+
+    fetch('http://localhost:2000/image-server/upload', {
+        method: 'POST',
+        body: data
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+async function handleInputChange(event) {
+    isUploaded.value = await true;
+    previewImageUrl.value = URL.createObjectURL(event.target.files[0]);
+}
 </script>
 <style scoped>
 main {
@@ -82,7 +115,7 @@ main {
     outline: 1px solid #000;
 }
 
-#choose-file-area {
+.choose-file-area {
     height: 500px;
     outline: 1px dashed black;
     display: flex;
@@ -95,6 +128,8 @@ main {
     font-size: 20px;
     background-color: #f8f8f8;
     cursor: pointer;
+    max-width: 517px;
+    object-fit: cover;
 }
 
 #description-label {
@@ -131,5 +166,58 @@ main {
 
 .input-group h1 {
     margin: 0;
+}
+
+#remove-uploaded-image {
+  align-items: center;
+  background-color: #FFE7E7;
+  background-position: 0 0;
+  border: 1px solid #FEE0E0;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #D33A2C;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 33.4929px;
+  list-style: outside url(https://www.smashingmagazine.com/images/bullet.svg) none;
+  padding: 2px 12px;
+  text-align: center;
+  transition: border .2s ease-in-out,box-shadow .2s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  word-break: break-word;
+  margin-top: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+#remove-uploaded-image:active,
+#remove-uploaded-image:hover,
+#remove-uploaded-image:focus {
+  outline: 0;
+}
+
+
+#remove-uploaded-image:active {
+  background-color: #D33A2C;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset;
+  color: #FFFFFF;
+}
+
+#remove-uploaded-image:hover {
+  background-color: #FFE3E3;
+  border-color: #FAA4A4;
+}
+
+#remove-uploaded-image:active:hover,
+#remove-uploaded-image:focus:hover,
+#remove-uploaded-image:focus {
+  background-color: #D33A2C;
+  box-shadow: rgba(0, 0, 0, 0.12) 0 1px 3px 0 inset;
+  color: #FFFFFF;
 }
 </style>

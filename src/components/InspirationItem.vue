@@ -1,5 +1,5 @@
 <template>
-    <img class="sample-outfit" alt="sample-outfit" src="https://firebasestorage.googleapis.com/v0/b/seminar-d43fa.appspot.com/o/outfit.png?alt=media&token=d3f5b7ef-9985-4c80-9bc5-64edc804efee"/>
+    <img class="sample-outfit" alt="sample-outfit" :src="imageURL"/>
 
     <section class="information-section">
         <div class="left-side">
@@ -18,6 +18,7 @@
     width: 250px;
     height: 375px;
     border-radius: 8px;
+    object-fit: cover;
 }
 
 .information-section {
@@ -62,4 +63,7 @@
 </style>
 
 <script setup>
+defineProps({
+    imageURL: String
+})
 </script>

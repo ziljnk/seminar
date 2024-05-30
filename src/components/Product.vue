@@ -1,16 +1,22 @@
 <template>
-<RouterLink to="/about" class="product">
-    <img src="https://firebasestorage.googleapis.com/v0/b/seminar-d43fa.appspot.com/o/product.png?alt=media&token=e0007366-5992-478f-84c8-96741c0be327" alt="product"/>
+<RouterLink :to="`/${_id}`" class="product">
+    <img :src="productInformation.images[0]" alt="product"/>
 
     <div class="product-information">
-        <h1>Denim Jacket</h1>
-        <p>$500</p>
+        <h1>{{ name }}</h1>
+        <p>${{ price }}</p>
     </div>
 </RouterLink>
 </template>
 
 <script setup>
 import { RouterLink } from 'vue-router'
+
+const props = defineProps({
+    productInformation: Object
+})
+
+let { name, price, _id } = props.productInformation
 </script>
 
 <style scoped>
