@@ -70,6 +70,9 @@
 .image-group {
     width: 50%;
     padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .text-group {
@@ -86,20 +89,22 @@
 
 #main-image {
     width: 100%;
-    max-width: 500px;
 }
 
 .sub-images {
-    display: flex;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(calc(25% - 12px), 1fr));
     width: 100%;
+    margin: 0 auto; 
+    box-sizing: border-box;
+    gap: 12px;
 }
 
 .sub-image {
-    width: calc((100% - 32px) / 3);
-    outline: 1px solid transparent;
-    border-radius: 4px;
-    cursor: pointer;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 .sub-image:hover {
@@ -221,8 +226,10 @@ onBeforeMount(async () => {
     .then(response => response.json())
     .then(data => {
         productInformation.value = data.product;
-        subImages.value = productInformation.value.images.shift()
+        subImages.value = productInformation.value.images.slice(1)
         console.log("productInformation", productInformation.value)
+
+        console.log("subImages", subImages.value)
     })
     .catch(error => {
         console.error('Error:', error);

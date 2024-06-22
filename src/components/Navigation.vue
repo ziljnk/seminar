@@ -2,7 +2,7 @@
     <nav>
         <Bars3Icon class="icon"/>
         <MagnifyingGlassIcon class="icon" @click="isOpened = true"/>
-        <RouterLink to="/">LOUIS VUITTON</RouterLink>
+        <a href="/">LOUIS VUITTON</a>
         <UserIcon class="icon" />
 
         <VueSidePanel
