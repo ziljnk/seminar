@@ -13,7 +13,7 @@
         flex-direction: column;
         height: 100vh;
         width: 100vw;
-        padding-bottom: 500px;
+        /* padding-bottom: 500px; */
     }
 
     main {
