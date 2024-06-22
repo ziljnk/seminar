@@ -15,28 +15,23 @@
 
             <section id="right">
                 <div class="input-group">
-                    <h1>Title</h1>
-                    <input placeholder="Add title"/>
+                    <h1>Name</h1>
+                    <input v-model="outfitInformation.name" placeholder="Add Name"/>
                 </div>
 
                 <div class="input-group">
-                    <h1>Description</h1>
-                    <input placeholder="Add description"/>
+                    <h1>Height</h1>
+                    <input v-model="outfitInformation.height" placeholder="Add Height"/>
                 </div>
 
                 <div class="input-group">
-                    <h1>Link</h1>
-                    <input placeholder="Add link"/>
+                    <h1>Weight</h1>
+                    <input v-model="outfitInformation.weight" placeholder="Add Weight"/>
                 </div>
 
                 <div class="input-group">
-                    <h1>Subject</h1>
-                    <input placeholder="Add subject"/>
-                </div>
-
-                <div class="input-group">
-                    <h1>Hastag</h1>
-                    <input placeholder="Add hastag"/>
+                    <h1>Size</h1>
+                    <input v-model="outfitInformation.size" placeholder="Add Size"/>
                 </div>
 
                 <button @click="handleUpload">Upload</button>
@@ -52,6 +47,12 @@ import { ref, onMounted } from "vue"
 let isUploaded = ref(false);
 let previewImageUrl = ref('');
 let chooseFile = ref(null);
+let outfitInformation = ref({
+    name: '',
+    height: '',
+    weight: '',
+    size: ''
+});
 
 onMounted(() => {
     chooseFile.value = document.getElementById('choose-file');
@@ -66,8 +67,22 @@ function handleUpload() {
         body: data
     })
     .then(response => response.json())
-    .then(data => {
-        console.log(data);
+    .then(dataImage => {
+        fetch("http://localhost:2000/api/v1/community", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: outfitInformation.value.name,
+                height: outfitInformation.value.height,
+                weight: outfitInformation.value.weight,
+                size: outfitInformation.value.size,
+                image: dataImage.image
+            })
+        }).then(() => {
+            console.log("create outfit successfully!")
+        })
     })
     .catch(error => {
         console.error('Error:', error);
