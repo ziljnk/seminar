@@ -63,7 +63,7 @@
 
 <style scoped>
 .product-information {
-    width: 100%;
+    /* width: 100%; */
     display: flex;
 }
 

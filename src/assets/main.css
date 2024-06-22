@@ -2,6 +2,11 @@ body {
     padding: 0;
     margin: 0;
     font-family: "DM Sans", sans-serif;
+    overflow-x: hidden;
+}
+
+section{
+    padding-bottom: 20px !important;
 }
 
 input::placeholder {

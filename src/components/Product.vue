@@ -1,12 +1,12 @@
 <template>
-<RouterLink :to="`/${_id}`" class="product">
+<a :href="`/${_id}`" class="product">
     <img :src="productInformation.images[0]" alt="product"/>
 
     <div class="product-information">
         <h1>{{ name }}</h1>
         <p>${{ price }}</p>
     </div>
-</RouterLink>
+</a>
 </template>
 
 <script setup>
@@ -26,6 +26,8 @@ let { name, price, _id } = props.productInformation
     padding: 20px;
     border-radius: 8px;
     background: linear-gradient(-145deg, #ffffff, #f0f0f0);
+
+    text-decoration: none;
 }
 
 .product:hover {
