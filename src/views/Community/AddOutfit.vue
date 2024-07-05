@@ -82,6 +82,8 @@ function handleUpload() {
             })
         }).then(() => {
             console.log("create outfit successfully!")
+            alert("Create outfit successfully!")
+            window.location.href = '/community'
         })
     })
     .catch(error => {
